@@ -19,13 +19,14 @@ exports.handler = (event, context, callback, config) => {
 };
 
 userFromBasicAuthString = (header) => {
+  if (!header) {
+    console.log('no header provided');
+    return null;
+  }
+
   var match = credentialsRegExp.exec(header || '');
 
   if (!match) {
-    if (!header) {
-      console.log('no header provided');
-      return null;
-    }
     match = ['', header];
   }
 
@@ -56,5 +57,6 @@ generatePolicy = (principalId, effect, resource) => {
     policyDocument.Statement[0] = statementOne;
     authResponse.policyDocument = policyDocument;
   }
+  
   return authResponse;
 }
